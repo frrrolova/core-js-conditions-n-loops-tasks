@@ -21,8 +21,8 @@
  *  0  => true
  *  -5 => false
  */
-function isPositive(/* number */) {
-  throw new Error('Not implemented');
+function isPositive(num) {
+  return num >= 0;
 }
 
 /**
@@ -38,8 +38,9 @@ function isPositive(/* number */) {
  *  -5, 0, 5      => 5
  *  -0.1, 0, 0.2  => 0.2
  */
-function getMaxNumber(/* a, b, c */) {
-  throw new Error('Not implemented');
+function getMaxNumber(a, b, c) {
+  const firstMax = a > b ? a : b;
+  return firstMax > c ? firstMax : c;
 }
 
 /**
@@ -52,7 +53,7 @@ function getMaxNumber(/* a, b, c */) {
  * }} Position
  * @param {Object} queen - The position of the queen.
  * @param {Object} king - The position of the king.
- * @return {boolean} True if the queen can capture the king, false otherwise.
+ * @return {boolean} True if the queen can capture the king, false otherwise.Checks if a queen can capture a king in the next move on an 8x8 chessboard
  *
  * @example
  * {x: 1, y: 1}, {x: 5, y: 5} => true
@@ -60,8 +61,12 @@ function getMaxNumber(/* a, b, c */) {
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  */
-function canQueenCaptureKing(/* queen, king */) {
-  throw new Error('Not implemented');
+function canQueenCaptureKing(queen, king) {
+  return (
+    queen.x === king.x ||
+    queen.y === king.y ||
+    Math.abs(queen.x - king.x) === Math.abs(queen.y - king.y)
+  );
 }
 
 /**
@@ -82,8 +87,12 @@ function canQueenCaptureKing(/* queen, king */) {
  *  2, 2, 5   => false
  *  3, 0, 3   => false
  */
-function isIsoscelesTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+
+function isIsoscelesTriangle(a, b, c) {
+  if (a + b > c && b + c > a && c + a > b) {
+    return a === b || b === c || a === c;
+  }
+  return false;
 }
 
 /**
@@ -100,8 +109,35 @@ function isIsoscelesTriangle(/* a, b, c */) {
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
-  throw new Error('Not implemented');
+function convertToRomanNumerals(num) {
+  const values = {
+    1: 'I',
+    2: 'II',
+    3: 'III',
+    4: 'IV',
+    5: 'V',
+    6: 'VI',
+    7: 'VII',
+    8: 'VIII',
+    9: 'IX',
+    10: 'X',
+  };
+
+  if (num <= 10) {
+    return values[num];
+  }
+  let result = '';
+  if (num > 10 && num < 20) {
+    result += 'X';
+  } else if (num >= 20 && num < 30) {
+    result += 'XX';
+  } else if (num >= 30 && num < 40) {
+    result += 'XXX';
+  }
+  const digits = String(num);
+  const tail = +digits[1];
+  result += values[tail];
+  return result;
 }
 
 /**
@@ -119,8 +155,55 @@ function convertToRomanNumerals(/* num */) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
+function convertNumberToString(numberStr) {
+  let result = '';
+  for (let i = 0; i < numberStr.length; i += 1) {
+    switch (numberStr[i]) {
+      case '0':
+        result += 'zero';
+        break;
+      case '1':
+        result += 'one';
+        break;
+      case '2':
+        result += 'two';
+        break;
+      case '3':
+        result += 'three';
+        break;
+      case '4':
+        result += 'four';
+        break;
+      case '5':
+        result += 'five';
+        break;
+      case '6':
+        result += 'six';
+        break;
+      case '7':
+        result += 'seven';
+        break;
+      case '8':
+        result += 'eight';
+        break;
+      case '9':
+        result += 'nine';
+        break;
+      case ',':
+        result += 'point';
+        break;
+      case '.':
+        result += 'point';
+        break;
+      case '-':
+        result += 'minus';
+        break;
+      default:
+        result += '';
+    }
+    result += i < numberStr.length - 1 ? ' ' : '';
+  }
+  return result;
 }
 
 /**
@@ -135,8 +218,12 @@ function convertNumberToString(/* numberStr */) {
  *  '0123210'   => true
  *  'qweqwe'    => false
  */
-function isPalindrome(/* str */) {
-  throw new Error('Not implemented');
+function isPalindrome(str) {
+  let reversed = '';
+  for (let i = str.length - 1; i >= 0; i -= 1) {
+    reversed += str[i];
+  }
+  return str === reversed;
 }
 
 /**
@@ -153,8 +240,15 @@ function isPalindrome(/* str */) {
  *  'qwerty', 'Q'     => -1
  *  'qwerty', 'p'     => -1
  */
-function getIndexOf(/* str, letter */) {
-  throw new Error('Not implemented');
+function getIndexOf(str, letter) {
+  let res = -1;
+  for (let i = 0; i < str.length; i += 1) {
+    if (str[i] === letter) {
+      res = i;
+      break;
+    }
+  }
+  return res;
 }
 
 /**
@@ -172,14 +266,23 @@ function getIndexOf(/* str, letter */) {
  *  12345, 0    => false
  *  12345, 6    => false
  */
-function isContainNumber(/* num, digit */) {
-  throw new Error('Not implemented');
+function isContainNumber(num, digit) {
+  const str = String(num);
+  const val = String(digit);
+  let res = false;
+  for (let i = 0; i < str.length; i += 1) {
+    if (str[i] === val) {
+      res = true;
+      break;
+    }
+  }
+  return res;
 }
 
 /**
  * Finds the index of an element in an array where the sum of elements to the left equals the sum of elements to the right.
  * If such an index does not return -1.
- * In this task, the use of methods of the Array and String classes is not allowed.
+ * In this task, the use of methods of the Array and String classes is not allowed..
  *
  * @param {number[]} arr - The array to check.
  * @return {number} The index of the balance point, or -1 if none exists.
