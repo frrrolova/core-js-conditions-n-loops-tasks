@@ -544,8 +544,43 @@ function shuffleChar(str, iterations) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const strOfNums = String(number);
+  const arrOfNums = [];
+
+  let prev = +strOfNums[strOfNums.length - 1];
+  let curr = +strOfNums[strOfNums.length - 2];
+  let ind = strOfNums.length - 2;
+
+  if (curr >= prev) {
+    for (let i = strOfNums.length - 2; curr >= prev; i -= 1) {
+      prev = +strOfNums[i];
+      curr = +strOfNums[i - 1];
+      ind = i - 1;
+    }
+  }
+  let smallestRight = +strOfNums[ind + 1];
+  let indOfsmallestRight = ind + 1;
+  for (let i = ind + 1; i < strOfNums.length; i += 1) {
+    if (+strOfNums[i] > curr && +strOfNums[i] < smallestRight) {
+      smallestRight = +strOfNums[i];
+      indOfsmallestRight = i;
+    }
+  }
+
+  for (let i = 0; i < strOfNums.length; i += 1) {
+    if (i === ind) {
+      arrOfNums.push(smallestRight);
+    } else if (i === indOfsmallestRight) {
+      arrOfNums.push(curr);
+    } else {
+      arrOfNums.push(+strOfNums[i]);
+    }
+  }
+  const toBeSortedSubArr = arrOfNums.splice(ind + 1, arrOfNums.length - 1);
+  toBeSortedSubArr.sort((a, b) => a - b);
+  const resArr = [...arrOfNums, ...toBeSortedSubArr].join('');
+  return +resArr;
 }
 
 module.exports = {
