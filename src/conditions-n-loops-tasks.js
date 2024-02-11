@@ -404,8 +404,72 @@ function getSpiralMatrix(size) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const rotated = matrix;
+  const newMatrix = [];
+  const size = matrix.length;
+  newMatrix.length = size;
+  for (let i = 0; i < size; i += 1) {
+    newMatrix[i] = [];
+    newMatrix[i].length = size;
+    for (let j = 0; j < size; j += 1) {
+      newMatrix[i][j] = null;
+    }
+  }
+
+  const lastIndex = size - 1;
+
+  for (let i = 0; i < size; i += 1) {
+    for (let j = 0; j < size; j += 1) {
+      const row = j;
+      const col = lastIndex - i;
+      newMatrix[row][col] = matrix[i][j];
+    }
+  }
+
+  for (let i = 0; i < size; i += 1) {
+    for (let j = 0; j < size; j += 1) {
+      rotated[i][j] = newMatrix[i][j];
+    }
+  }
+  return rotated;
+}
+
+function merge(damnsArr, s, m, e) {
+  const arr = damnsArr;
+  let startInd = s;
+  let middle = m;
+  let rightInd = middle + 1;
+  if (arr[middle] <= arr[rightInd]) {
+    return;
+  }
+
+  while (startInd <= middle && rightInd <= e) {
+    if (arr[startInd] <= arr[rightInd]) {
+      startInd += 1;
+    } else {
+      const val = arr[rightInd];
+      let index = rightInd;
+      while (index !== startInd) {
+        arr[index] = arr[index - 1];
+        index -= 1;
+      }
+      arr[startInd] = val;
+
+      startInd += 1;
+      middle += 1;
+      rightInd += 1;
+    }
+  }
+}
+
+function mergeSort(arr, left, right) {
+  if (left < right) {
+    const middle = left + Math.floor((right - left) / 2);
+    mergeSort(arr, left, middle);
+    mergeSort(arr, middle + 1, right);
+    merge(arr, left, middle, right);
+  }
 }
 
 /**
@@ -422,8 +486,9 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+
+function sortByAsc(arr) {
+  mergeSort(arr, 0, arr.length - 1);
 }
 
 /**
