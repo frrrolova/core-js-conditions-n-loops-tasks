@@ -435,41 +435,31 @@ function rotateMatrix(matrix) {
   return rotated;
 }
 
-function merge(damnsArr, s, m, e) {
-  const arr = damnsArr;
-  let startInd = s;
-  let middle = m;
-  let rightInd = middle + 1;
-  if (arr[middle] <= arr[rightInd]) {
+function splitting(arr, start, end) {
+  const damnArr = arr;
+  const piv = damnArr[end];
+  let pivInd = start;
+
+  for (let i = start; i < end; i += 1) {
+    if (damnArr[i] < piv) {
+      [damnArr[i], damnArr[pivInd]] = [damnArr[pivInd], damnArr[i]];
+      pivInd += 1;
+    }
+  }
+
+  [damnArr[pivInd], damnArr[end]] = [damnArr[end], damnArr[pivInd]];
+  return pivInd;
+}
+
+function recursiveSort(arr, startInd, endInd) {
+  if (startInd >= endInd) {
     return;
   }
 
-  while (startInd <= middle && rightInd <= e) {
-    if (arr[startInd] <= arr[rightInd]) {
-      startInd += 1;
-    } else {
-      const val = arr[rightInd];
-      let index = rightInd;
-      while (index !== startInd) {
-        arr[index] = arr[index - 1];
-        index -= 1;
-      }
-      arr[startInd] = val;
+  const ind = splitting(arr, startInd, endInd);
 
-      startInd += 1;
-      middle += 1;
-      rightInd += 1;
-    }
-  }
-}
-
-function mergeSort(arr, left, right) {
-  if (left < right) {
-    const middle = left + Math.floor((right - left) / 2);
-    mergeSort(arr, left, middle);
-    mergeSort(arr, middle + 1, right);
-    merge(arr, left, middle, right);
-  }
+  recursiveSort(arr, startInd, ind - 1);
+  recursiveSort(arr, ind + 1, endInd);
 }
 
 /**
@@ -488,7 +478,9 @@ function mergeSort(arr, left, right) {
  */
 
 function sortByAsc(arr) {
-  mergeSort(arr, 0, arr.length - 1);
+  const start = 0;
+  const end = arr.length - 1;
+  recursiveSort(arr, start, end);
 }
 
 /**
