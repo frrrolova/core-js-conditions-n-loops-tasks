@@ -292,8 +292,21 @@ function isContainNumber(num, digit) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  const len = arr.length;
+  let leftsum;
+  let rightsum;
+
+  for (let i = 0; i < len; i += 1) {
+    leftsum = 0;
+    for (let j = 0; j < i; j += 1) leftsum += arr[j];
+    rightsum = 0;
+    for (let j = i + 1; j < len; j += 1) rightsum += arr[j];
+
+    if (leftsum === rightsum) return i;
+  }
+
+  return -1;
 }
 
 /**
@@ -317,8 +330,63 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const matrix = [];
+  matrix.length = size;
+  for (let i = 0; i < size; i += 1) {
+    matrix[i] = [];
+    matrix[i].length = size;
+    for (let j = 0; j < size; j += 1) {
+      matrix[i][j] = null;
+    }
+  }
+
+  let row = 0;
+  let col = 0;
+  let counter = 1;
+
+  while (counter <= size * size) {
+    while (matrix[row][col] === null) {
+      matrix[row][col] = counter;
+      counter += 1;
+      col += 1;
+      if (matrix[row]?.[col] !== null) {
+        row += 1;
+        col -= 1;
+        break;
+      }
+    }
+    while (matrix[row]?.[col] === null) {
+      matrix[row][col] = counter;
+      counter += 1;
+      row += 1;
+      if (matrix[row]?.[col] !== null) {
+        col -= 1;
+        row -= 1;
+        break;
+      }
+    }
+    while (matrix[row]?.[col] === null) {
+      matrix[row][col] = counter;
+      counter += 1;
+      col -= 1;
+      if (matrix[row]?.[col] !== null) {
+        row -= 1;
+        col += 1;
+        break;
+      }
+    }
+    while (matrix[row]?.[col] === null) {
+      matrix[row][col] = counter;
+      counter += 1;
+      row -= 1;
+    }
+    if (matrix[row]?.[col] !== null) {
+      row += 1;
+      col += 1;
+    }
+  }
+  return matrix;
 }
 
 /**
